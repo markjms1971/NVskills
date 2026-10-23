@@ -7,9 +7,9 @@ This skill is ready for commercial/non-commercial use. <br>
 NVIDIA <br>
 
 ### License/Terms of Use: <br>
-Apache 2.0 AND CC-BY-4.0 <br>
+Apache 2.0 <br>
 ## Use Case: <br>
-External operators and engineers deploying, wiring, and debugging a CollectX-based telemetry collector and its exporters on a host or BlueField they administer. <br>
+External operators and infrastructure engineers use this skill to deploy, wire, run, and debug a CollectX (clx) based DOCA telemetry collector and its exporters on a host or BlueField they administer, getting provider counters off the box through Prometheus, Fluent Bit, NetFlow, or file/IPC backends. It routes reader/publisher library work and the productized DTS container to their respective owners rather than answering them directly. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
@@ -26,13 +26,12 @@ Mitigation: Review and scan skill before deployment. <br>
 
 ## Reference(s): <br>
 - [details.md](references/details.md) <br>
-- [DOCA SDK Documentation](https://docs.nvidia.com/doca/sdk/index.html) <br>
-- [DOCA Samples](https://github.com/NVIDIA-DOCA/doca-samples) <br>
+- [NVIDIA DOCA SDK Documentation](https://docs.nvidia.com/doca/sdk/index.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Analysis] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
+**Output Type(s):** [Configuration instructions, Shell commands, Analysis] <br>
+**Output Format:** [Markdown with inline code blocks] <br>
 **Output Parameters:** [1D] <br>
 **Other Properties Related to Output:** [None] <br>
 
@@ -43,37 +42,39 @@ Mitigation: Review and scan skill before deployment. <br>
 
 
 ## Evaluation Tasks: <br>
-Evaluated against 2 evaluation tasks (1 positive activation, 1 negative activation) in k8s-sandbox environment. <br>
+3 evaluation tasks (2 positive, 1 negative), each attempt run once in its own isolated k8s-sandbox pod. <br>
 
 ## Evaluation Metrics Used: <br>
 Reported benchmark dimensions: <br>
-- Security: Checks whether skill-assisted execution avoids unsafe behavior such as secret leakage, destructive commands, or unauthorized access. <br>
-- Correctness: Checks whether the agent follows the expected workflow and produces the correct final output. <br>
-- Discoverability: Checks whether the agent loads the skill when relevant and avoids using it when irrelevant. <br>
-- Effectiveness: Checks whether the agent performs measurably better with the skill than without it. <br>
-- Efficiency: Checks whether the agent uses fewer tokens and avoids redundant work. <br>
+- Security: Is it safe to use? Checks for unsafe operations, secret leakage, and unauthorized access. <br>
+- Correctness: Is the answer correct? Checks final-answer accuracy against the reference answer. <br>
+- Discoverability: Was the right skill loaded when needed, decoys avoided, and the workflow executed. <br>
+- Effectiveness: Did the skill help complete the task? Equal-weight mean of goal completion and expected-workflow adherence. <br>
+- Efficiency: Did it avoid wasted tool calls and token usage? Equal-weight tool-call productivity and token efficiency. <br>
 
 Underlying evaluation signals used in this run: <br>
-- `security`: Checks for unsafe operations, secret leakage, and unauthorized access. <br>
-- `skill_execution`: Verifies that the agent loaded the expected skill and workflow. <br>
-- `skill_efficiency`: Checks routing quality, decoy avoidance, and redundant tool usage. <br>
-- `accuracy`: Grades final-answer correctness against the reference answer. <br>
-- `goal_accuracy`: Checks whether the overall user task completed successfully. <br>
-- `behavior_check`: Verifies expected behavior steps, including safety expectations. <br>
+- `security`: Flags unsafe operations, secret leakage, and unauthorized access. <br>
+- `skill_execution`: Whether the expected skill was selected, decoys were avoided, and the workflow executed. <br>
+- `accuracy`: Final-answer correctness against the reference answer. <br>
+- `goal_accuracy`: Whether the user's goal was achieved. <br>
+- `behavior_check`: Whether the expected workflow behavior was followed. <br>
+- `skill_efficiency`: Tool-call productivity (legacy wire id; routing is scored under Discoverability). <br>
+- `token_efficiency`: Actual uncached prompt plus completion usage (50% of Efficiency). <br>
 
 
 
 ## Evaluation Results: <br>
-| Dimension | Num | Claude Code (`aws/anthropic/bedrock-claude-opus-4-8`) | Codex (`openai/openai/gpt-5.5`) |
-|---|---:|---:|---:|
-| Security | 2 | 100% (+0%) | 100% (+0%) |
-| Correctness | 2 | 100% (+80%) | 100% (+50%) |
-| Discoverability | 2 | 100% (+25%) | 97% (+47%) |
-| Effectiveness | 2 | 100% (+29%) | 84% (+38%) |
-| Efficiency | 2 | 94% (+19%) | 69% (+19%) |
+| Measure | Claude Code (Baseline → Skill Uplift) | Codex (Baseline → Skill Uplift) |
+|---|---:|---:|
+| Overall | 97.1% (uplift unavailable) | 95.3% (uplift unavailable) |
+| Security | 66.7% → 100.0% (+33.3 points) | 50.0% → 100.0% (+50.0 points) |
+| Correctness | 80.0% → 100.0% (+20.0 points) | 80.0% → 100.0% (+20.0 points) |
+| Discoverability | 100.0% (uplift unavailable) | 92.5% (uplift unavailable) |
+| Effectiveness | 72.2% → 100.0% (+27.8 points) | 43.9% → 97.5% (+53.6 points) |
+| Efficiency | 85.4% (uplift unavailable) | 86.7% (uplift unavailable) |
 
 ## Skill Version(s): <br>
-ffe362c (source: git SHA, committed 2026-07-25) <br>
+946399d (source: git SHA, committed 2026-10-21) <br>
 
 ## Ethical Considerations: <br>
 NVIDIA believes Trustworthy AI is a shared responsibility and we have established policies and practices to enable development for a wide array of AI applications. When downloaded or used in accordance with our terms of service, developers should work with their internal team to ensure this skill meets requirements for the relevant industry and use case and addresses unforeseen product misuse. <br>

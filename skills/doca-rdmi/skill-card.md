@@ -1,5 +1,5 @@
 ## Description: <br>
-Guides developers through hands-on DOCA RDMI (RDMA Initiator) programming, including choosing between doca-rdmi and doca-rdma, standing up connections and posters, attaching DPA completions, auditing EXPERIMENTAL symbols, and debugging DOCA_ERROR returns from RDMI calls. <br>
+Use this skill when the user works with DOCA RDMI, the RDMA Initiator library that lets a DPA-resident function originate one-sided RDMA toward a remote responder, covering library selection, connection/poster instantiation, DPA-side datapath wiring, EXPERIMENTAL-symbol auditing, and DOCA_ERROR_* decoding. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -9,7 +9,7 @@ NVIDIA <br>
 ### License/Terms of Use: <br>
 Apache 2.0 AND CC-BY-4.0 <br>
 ## Use Case: <br>
-External developers building DPA-resident DOCA applications that need to initiate one-sided RDMA operations (sends, writes, reads) from the accelerator without round-tripping through the host CPU. <br>
+External developers and engineers building DPA-resident DOCA applications use this skill to choose between doca-rdmi and doca-rdma, bring up doca_rdmi_connection and doca_rdmi_poster objects, wire DPA/verbs completions, audit EXPERIMENTAL symbols for a given DOCA release, and debug DOCA_ERROR_* statuses for one-sided RDMA originated from the BlueField DPA datapath. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
@@ -26,9 +26,9 @@ Mitigation: Review and scan skill before deployment. <br>
 
 ## Reference(s): <br>
 - [DOCA SDK Documentation](https://docs.nvidia.com/doca/sdk/index.html) <br>
-- [DOCA Samples](https://github.com/NVIDIA-DOCA/doca-samples) <br>
-- [DOCA Platform Framework](https://github.com/NVIDIA/doca-platform) <br>
-- [DOCA Developer Forum](https://forums.developer.nvidia.com/c/infrastructure/doca/370) <br>
+- [NVIDIA DOCA Samples](https://github.com/NVIDIA-DOCA/doca-samples) <br>
+- [RDMI Capabilities companion](CAPABILITIES.md) <br>
+- [RDMI Tasks companion](TASKS.md) <br>
 
 
 ## Skill Output: <br>
@@ -44,37 +44,39 @@ Mitigation: Review and scan skill before deployment. <br>
 
 
 ## Evaluation Tasks: <br>
-Evaluated against 4 internal evaluation tasks (3 positive skill-activation, 1 negative). <br>
+4 evaluation tasks (3 positive, 1 negative), each attempt run in its own isolated sandbox pod. <br>
 
 ## Evaluation Metrics Used: <br>
 Reported benchmark dimensions: <br>
-- Security: Checks whether skill-assisted execution avoids unsafe behavior such as secret leakage, destructive commands, or unauthorized access. <br>
-- Correctness: Checks whether the agent follows the expected workflow and produces the correct final output. <br>
-- Discoverability: Checks whether the agent loads the skill when relevant and avoids using it when irrelevant. <br>
-- Effectiveness: Checks whether the agent performs measurably better with the skill than without it. <br>
-- Efficiency: Checks whether the agent uses fewer tokens and avoids redundant work. <br>
+- Security: Is it safe to use? Checks unsafe operations, secret leakage, and unauthorized access. <br>
+- Correctness: Is the answer correct? Checks final-answer accuracy against the reference answer. <br>
+- Discoverability: Was the right skill loaded when needed, with decoys avoided? <br>
+- Effectiveness: Did the skill help complete the task? Equal-weight mean of goal completion and expected workflow adherence. <br>
+- Efficiency: Did it avoid wasted tool calls and token usage? Equal-weight mean of tool-call productivity and token efficiency. <br>
 
 Underlying evaluation signals used in this run: <br>
-- `security`: Checks for unsafe operations, secret leakage, and unauthorized access. <br>
-- `skill_execution`: Verifies that the agent loaded the expected skill and workflow. <br>
-- `skill_efficiency`: Checks routing quality, decoy avoidance, and redundant tool usage. <br>
-- `accuracy`: Grades final-answer correctness against the reference answer. <br>
-- `goal_accuracy`: Checks whether the overall user task completed successfully. <br>
-- `behavior_check`: Verifies expected behavior steps, including safety expectations. <br>
+- `security`: Unsafe operations, secret leakage, and unauthorized access. <br>
+- `skill_execution`: Whether the expected skill was selected, decoys were avoided, and the workflow executed. <br>
+- `skill_efficiency`: Tool-call productivity (legacy wire id; routing is scored under Discoverability). <br>
+- `accuracy`: Final-answer correctness against the reference answer. <br>
+- `goal_accuracy`: Whether the user's goal was achieved. <br>
+- `behavior_check`: Whether the expected workflow behavior was followed. <br>
+- `token_efficiency`: Actual uncached prompt plus completion usage (50% of Efficiency). <br>
 
 
 
 ## Evaluation Results: <br>
-| Dimension | Num | Claude Code (`aws/anthropic/bedrock-claude-opus-4-8`) | Codex (`openai/openai/gpt-5.5`) |
-|---|---:|---:|---:|
-| Security | 4 | 100% (+0%) | 100% (+0%) |
-| Correctness | 4 | 100% (+50%) | 100% (+30%) |
-| Discoverability | 4 | 100% (+38%) | 95% (+45%) |
-| Effectiveness | 4 | 86% (+59%) | 99% (+57%) |
-| Efficiency | 4 | 91% (+43%) | 100% (+71%) |
+| Measure | Claude Code (Baseline → Skill Uplift) | Codex (Baseline → Skill Uplift) |
+|---|---:|---:|
+| Overall | 96.0% — uplift unavailable | 95.3% — uplift unavailable |
+| Security | 100.0% → 100.0% (±0.0 points) | 100.0% → 100.0% (±0.0 points) |
+| Correctness | 75.0% → 100.0% (+25.0 points) | 75.0% → 100.0% (+25.0 points) |
+| Discoverability | 100.0% — uplift unavailable | 93.3% — uplift unavailable |
+| Effectiveness | 50.0% → 100.0% (+50.0 points) | 48.8% → 100.0% (+51.2 points) |
+| Efficiency | 79.8% — uplift unavailable | 82.9% — uplift unavailable |
 
 ## Skill Version(s): <br>
-6919a46 (source: git SHA, committed 2026-07-23) <br>
+946399d (source: git SHA, committed 2026-10-21) <br>
 
 ## Ethical Considerations: <br>
 NVIDIA believes Trustworthy AI is a shared responsibility and we have established policies and practices to enable development for a wide array of AI applications. When downloaded or used in accordance with our terms of service, developers should work with their internal team to ensure this skill meets requirements for the relevant industry and use case and addresses unforeseen product misuse. <br>
